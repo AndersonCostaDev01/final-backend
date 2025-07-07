@@ -1,5 +1,3 @@
-# user\serializers.py
-
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Profile
@@ -67,3 +65,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
         if value and not value.name.lower().endswith(('.jpg', '.jpeg')):
             raise serializers.ValidationError("A imagem deve estar no formato JPG.")
         return value
+
+# Serializador para busca simples de usuários
+class UserSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']

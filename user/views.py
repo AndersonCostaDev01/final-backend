@@ -1,10 +1,8 @@
-# user/views.py
-
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, filters
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from .serializers import UserDetailSerializer
 from django.shortcuts import get_object_or_404
+from .serializers import UserDetailSerializer, UserSearchSerializer
 
 User = get_user_model()
 
@@ -40,3 +38,11 @@ class UserProfileViewSet(viewsets.ViewSet):
             return User.objects.get(username=identifier)
         except User.DoesNotExist:
             return get_object_or_404(User, pk=identifier)
+
+# Novo ViewSet para busca/listagem de usuários com filtro por username, first_name, last_name
+class UserSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSearchSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'first_name', 'last_name']
+    permission_classes = []  # Use IsAuthenticated se quiser restringir o acesso

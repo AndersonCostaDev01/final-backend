@@ -1,15 +1,19 @@
-# user/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UserProfileViewSet, UserSearchViewSet
 
-from django.urls import path
-from .views import UserProfileViewSet
-
-# Ações do ViewSet baseadas na rota
+# Rota manual para UserProfileViewSet (perfil individual)
 user_profile = UserProfileViewSet.as_view({
     'get': 'retrieve',
     'patch': 'update',
     'delete': 'destroy',
 })
 
+# Router só para busca múltipla
+router = DefaultRouter()
+router.register(r'buscar-usuarios', UserSearchViewSet, basename='buscar')
+
 urlpatterns = [
-    path('<str:pk>/', user_profile, name='user-detail'),  # /users/<username>/
+    path('profile/<str:pk>/', user_profile, name='user-detail'), # /users/<username>/
+    path('', include(router.urls)),                             # /users/search/buscar-usuarios/?search=...
 ]
