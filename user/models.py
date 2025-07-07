@@ -1,3 +1,5 @@
+# user/models.py
+
 import os
 from io import BytesIO
 from PIL import Image
@@ -5,8 +7,9 @@ from django.core.files.base import ContentFile
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
 
-# Caminho de upload personalizado
+# Caminho personalizado para upload das fotos
 def user_profile_picture_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = f"user_{instance.user.id}.{ext}"
@@ -28,24 +31,41 @@ class Profile(models.Model):
     descricao = models.TextField(blank=True, default="")
 
     def save(self, *args, **kwargs):
+        # Checa se a foto foi alterada
+        try:
+            old_instance = Profile.objects.get(pk=self.pk)
+            old_foto = old_instance.foto
+        except Profile.DoesNotExist:
+            old_foto = None
+
+        # Se nova foto for enviada:
         if self.foto and hasattr(self.foto, 'file'):
             try:
                 img = Image.open(self.foto)
 
-                if img.format.lower() != 'jpeg' and img.format.lower() != 'jpg':
+                if img.format.lower() not in ['jpeg', 'jpg']:
                     raise ValueError("A imagem deve estar no formato JPG.")
 
+                # Converte e comprime
                 output = BytesIO()
-                img = img.convert('RGB')  # garante compatibilidade
-                img.save(output, format='JPEG', quality=70)  # Reduz qualidade para economizar espaço
+                img = img.convert('RGB')
+                img.save(output, format='JPEG', quality=70)
 
+                # Substitui imagem atual (sem salvar ainda)
                 self.foto.save(
                     os.path.basename(self.foto.name),
                     ContentFile(output.getvalue()),
                     save=False
                 )
+
+                # Remove imagem anterior se não for a padrão
+                if old_foto and old_foto.name != 'profile_pictures/default.jpg' and old_foto != self.foto:
+                    if default_storage.exists(old_foto.name):
+                        default_storage.delete(old_foto.name)
+
             except Exception as e:
                 print(f"Erro ao processar imagem: {e}")
+
         super().save(*args, **kwargs)
 
     def __str__(self):
