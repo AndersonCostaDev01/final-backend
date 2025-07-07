@@ -13,18 +13,22 @@ Incluindo outro URLconf
     1. Importe a função include: from django.urls import include, path
     2. Adicione uma URL ao urlpatterns:  path('blog/', include('blog.urls'))
 """
+# projeto/urls.py
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    # suas rotas aqui
+    path('admin/', admin.site.urls),
+
+    # Rotas da app
+    path('users/', include('user.urls')),
+    path('auth/', include('auth_app.urls')),
 ]
 
+# Serve arquivos de mídia durante o desenvolvimento (ex: fotos de perfil)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-]
