@@ -12,7 +12,7 @@ URL = "http://127.0.0.1:8000/auth/register/"
 }
 """
 
-for i in range(10):
+for i in range(10, 21):
     data = {
         "username": f"usuario{i}",
         "email": f"usuario{i}@gmail.com",

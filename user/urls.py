@@ -14,6 +14,6 @@ router = DefaultRouter()
 router.register(r'buscar-usuarios', UserSearchViewSet, basename='buscar')
 
 urlpatterns = [
-    path('profile/<str:pk>/', user_profile, name='user-detail'), # /users/<username>/
-    path('', include(router.urls)),                             # /users/search/buscar-usuarios/?search=...
+    path('profile/<str:pk>/', user_profile, name='user-detail'), 
+    path('', include(router.urls)),                             
 ]

@@ -33,7 +33,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = User(**validated_data)
         user.set_password(password)
         user.save()
-        # NÃO chame user.profile.save() aqui, a menos que você vá alterar algo no perfil
         return user
 
 # Visualização e edição do perfil completo
