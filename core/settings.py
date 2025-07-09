@@ -26,8 +26,6 @@ SECRET_KEY = 'django-insecure-$&ls_lu0u*ff+0v#ty)+l^ii2uuouuu_6es6$j0e@gvn)gvy)j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -40,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
     'rest_framework',
+    'corsheaders',
     # rotas do projeto
     'auth_app',
     'user',
@@ -54,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -141,7 +142,7 @@ AUTH_USER_MODEL = 'user.CustomUser'
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
-    "DEFAULT_AUTHENTICATION_CLASSES": [   # corrigido aqui
+    "DEFAULT_AUTHENTICATION_CLASSES": [   
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
@@ -152,4 +153,18 @@ REST_FRAMEWORK = {
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:8000",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  
+    "http://127.0.0.1:3000",
+    "https://tutwitter.vercel.app/",
+]
+
+ALLOWED_HOSTS = [
+    'costaanderson.pythonanywhere.com/',
+    'localhost',
+    '127.0.0.1',
+    'vercel.app',
+    'tutwitter.vercel.app',
 ]

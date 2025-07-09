@@ -26,6 +26,7 @@ urlpatterns = [
     # Rotas da app
     path('users/', include('user.urls')),
     path('auth/', include('auth_app.urls')),
+    path('posts/', include('post.urls')),
 ]
 
 # Serve arquivos de mídia durante o desenvolvimento (ex: fotos de perfil)
