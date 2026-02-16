@@ -242,8 +242,8 @@ fetch(apiUrl, {
 
 ### 🔑 Autenticação
 ```
-POST   /api/auth/register/                  -> Registrar novo usuário
-POST   /api/auth/login/                     -> Login e obtenção de token
+POST   /auth/register/                  -> Registrar novo usuário
+POST   /auth/login/                     -> Login e obtenção de token
 ```
 
 ### 📝 Postagens
