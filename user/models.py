@@ -20,6 +20,14 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=50)
 
+    # usuários que EU sigo
+    following = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        related_name='followers',
+        blank=True
+    )
+
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 
     def __str__(self):
